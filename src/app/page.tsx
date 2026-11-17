@@ -1,4 +1,7 @@
-import Link from "next/link"
+// 여기는 아직 서버 컴포넌트임.
+// 나중에 클라이언트와 서버 분리가 필요함.
+
+import Notfound from "@/component/404"
 import { neon } from "@neondatabase/serverless"
 
 export const dynamic = 'force-dynamic'
@@ -6,6 +9,10 @@ export const dynamic = 'force-dynamic'
 export default async function Home() {
   const sql = neon(process.env.DATABASE_URL!)
   const contents = await sql`SELECT id, title, img FROM contents`
+  .catch((error) => {
+    console.error("데이터베이스를 조회하려고 했으나 실패했습니다:", error)
+    return []
+  })
 
   return(
     <div>
@@ -30,7 +37,7 @@ export default async function Home() {
                       {content.title}
                     </li>
                   ))
-                : <span>콘텐츠를 불러오지 못헀습니다.</span>
+                : <Notfound />
               }
             </ul>
           </article>
