@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function Home() {
   const sql = neon(process.env.DATABASE_URL!)
-  const contents = await sql`SELECT id, title FROM contents`
+  const contents = await sql`SELECT id, title, img FROM contents`
 
   return(
     <div>
@@ -21,7 +21,14 @@ export default async function Home() {
               {
                 contents.length > 0
                 ? contents.map((content) => (
-                    <li key={content.id}>{content.title}</li>
+                    <li key={content.id}>
+                      {
+                        content.img
+                        ? <img src={content.img} alt={content.title} />
+                        : null
+                      }
+                      {content.title}
+                    </li>
                   ))
                 : <span>콘텐츠를 불러오지 못헀습니다.</span>
               }
