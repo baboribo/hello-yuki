@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function Home() {
   const sql = neon(process.env.DATABASE_URL!)
-  const contents = await sql`SELECT id, title, img FROM contents`
+  const contents = await sql`SELECT id, title, description, img FROM contents`
   .catch((error) => {
     console.error("데이터베이스를 조회하려고 했으나 실패했습니다:", error)
     return []
@@ -28,13 +28,17 @@ export default async function Home() {
               {
                 contents.length > 0
                 ? contents.map((content) => (
-                    <li key={content.id}>
+                    <li 
+                      key={content.id}
+                      className="m-4 pt-1 pb-1 pr-2 pl-2 bg-zinc-100 rounded-md"
+                    >
                       {
                         content.img
                         ? <img src={content.img} alt={content.title} />
                         : null
                       }
-                      {content.title}
+                      <h3>{content.title}</h3>
+                      <p>{content.description}</p>
                     </li>
                   ))
                 : <Notfound />
